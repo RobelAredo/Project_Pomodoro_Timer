@@ -76,11 +76,9 @@ function Pomodoro() {
   }
 
   const handleStop = () => {
-    if (session) {
-      setSession(null);
-      setIsTimerRunning(false);
-      setPomodoroValues({...initialValues});
-    }
+    setSession(null);
+    setIsTimerRunning(false);
+    setPomodoroValues({...initialValues});
   }
 
   const convertSecondsToMinutes = (timeInSeconds) => {
