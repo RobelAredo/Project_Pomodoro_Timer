@@ -1,8 +1,13 @@
 import React from "react"
 import Paused from "./Paused"
 
-function PomodoroSession ({secondsRemaining, duration, label, convertSecondsToMinutes, stop, pause}) {
+function PomodoroSession ({session, convertSecondsToMinutes, pomodoroValues}) {
+  const stop = pomodoroValues.stop;
   if (stop) return null;
+  const duration = session?.label === "On Break" ? pomodoroValues.break : pomodoroValues.focus;
+  const secondsRemaining = session?.timeRemaining;
+  const label= session?.label;
+  const pause = pomodoroValues.pause;
   return ( 
     <>
     <div className="row mb-2">

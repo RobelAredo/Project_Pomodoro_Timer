@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import classNames from "../utils/class-names";
 import useInterval from "../utils/useInterval";
 import PomodoroSession from "./PomodoroSession";
+import SessionPlayPauseStopControl from "./SessionPlayPauseStopControl";
+import SessionTimeButtonControl from "./SessionTimeButtonControl";
 
 function nextTick(prevState) {
   const timeRemaining = Math.max(0, prevState.timeRemaining - 1);
@@ -29,7 +30,7 @@ function nextSession(focusDuration, breakDuration) {
 function Pomodoro() {
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [session, setSession] = useState(null);
-  const initialValues = {focus:1500, break:300, stop:true, pause:true, on:"focus"}
+  const initialValues = {focus:1500, break:300, stop:true, pause:true}
   const [pomodoroValues, setPomodoroValues] = useState({...initialValues});
 
   useInterval(() => {
@@ -92,104 +93,22 @@ function Pomodoro() {
 
   return (
     <div className="pomodoro">
-      <div className="row">
-        <div className="col">
-          <div className="input-group input-group-lg mb-2">
-            <span className="input-group-text" data-testid="duration-focus">
-              Focus Duration: {convertSecondsToMinutes(pomodoroValues.focus)}
-            </span>
-            <div className="input-group-append">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-testid="decrease-focus"
-                onClick={()=> handleDurationClick("focus", "-")}
-                disabled={!pomodoroValues.stop}
-              >
-                <span className="oi oi-minus" />
-              </button>
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-testid="increase-focus"
-                onClick={()=> handleDurationClick("focus", "+")}
-                disabled={!pomodoroValues.stop}
-              >
-                <span className="oi oi-plus" />
-              </button>
-            </div>
-          </div>
-        </div>
-        <div className="col">
-          <div className="float-right">
-            <div className="input-group input-group-lg mb-2">
-              <span className="input-group-text" data-testid="duration-break">
-                Break Duration: {convertSecondsToMinutes(pomodoroValues.break)}
-              </span>
-              <div className="input-group-append">
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  data-testid="decrease-break"
-                  onClick={()=> handleDurationClick("break", "-")}
-                  disabled={!pomodoroValues.stop}
-                >
-                  <span className="oi oi-minus" />
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  data-testid="increase-break"
-                  onClick={()=> handleDurationClick("break", "+")}
-                  disabled={!pomodoroValues.stop}
-                >
-                  <span className="oi oi-plus" />
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="row">
-        <div className="col">
-          <div
-            className="btn-group btn-group-lg mb-2"
-            role="group"
-            aria-label="Timer controls"
-          >
-            <button
-              type="button"
-              className="btn btn-primary"
-              data-testid="play-pause"
-              title="Start or pause timer"
-              onClick={playPause}
-            >
-              <span
-                className={classNames({
-                  oi: true,
-                  "oi-media-play": !isTimerRunning,
-                  "oi-media-pause": isTimerRunning,
-                })}
-              />
-            </button>
-            <button
-              type="button"
-              className="btn btn-secondary"
-              data-testid="stop"
-              title="Stop the session"
-              onClick={handleStop}
-              disabled={pomodoroValues.stop}
-            >
-              <span className="oi oi-media-stop" />
-            </button>
-          </div>
-        </div>
-      </div>
-      <div>
-        <PomodoroSession duration={session?.label === "On Break" ? pomodoroValues.break : pomodoroValues.focus} secondsRemaining={session?.timeRemaining}
-        label={session?.label} convertSecondsToMinutes={convertSecondsToMinutes}
-        stop={pomodoroValues.stop} pause={pomodoroValues.pause}/>
-      </div>
+      <SessionTimeButtonControl 
+        pomodoroValues={pomodoroValues}
+        handleDurationClick={handleDurationClick}
+        convertSecondsToMinutes={convertSecondsToMinutes}
+      />
+      <SessionPlayPauseStopControl
+        pomodoroValues={pomodoroValues}
+        isTimerRunning={isTimerRunning}
+        playPause={playPause}
+        handleStop={handleStop}
+      />
+      <PomodoroSession
+        session = {session}
+        convertSecondsToMinutes={convertSecondsToMinutes}
+        pomodoroValues={pomodoroValues}
+      />
     </div>
   );
 }
