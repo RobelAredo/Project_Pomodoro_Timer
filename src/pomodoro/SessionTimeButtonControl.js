@@ -4,7 +4,7 @@ import DurationTimeControl from "./DurationTimeControl";
 function SessionTimeButtonControl ({pomodoroValues, handleDurationClick, convertSecondsToMinutes}) {
 
   return (
-    <div className="row">
+    <div className="row" style={{display: "row", justifyContent: "center"}}>
       <DurationTimeControl
         title="Focus"
         pomodoroValues={pomodoroValues}

@@ -3,8 +3,8 @@ import React from "react";
 function DurationTimeControl ({title, pomodoroValues, convertSecondsToMinutes, handleDurationClick}) {
   const label = title.toLowerCase();
   return (
-    <div className="col">
-        <div className="input-group input-group-lg mb-2">
+    <div className="col pl-5">
+        <div className="row input-group input-group-lg mb-2" style={{justifyContent: "center"}}>
           <span className="input-group-text" data-testid={`duration-${label}`}>
             {title} Duration: {convertSecondsToMinutes(pomodoroValues[label])}
           </span>
